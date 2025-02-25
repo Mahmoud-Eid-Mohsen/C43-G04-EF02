@@ -16,7 +16,7 @@ namespace Assignment.Dbcontexts
         {
             modelBuilder.Entity<Student>(Builder =>
             {
-                //Builder
+                
                 //Builder.Property(e => e.salry).HasColumnType("decimal(18,3)");
 
 
