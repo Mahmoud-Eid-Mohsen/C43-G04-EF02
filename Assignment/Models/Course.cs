@@ -13,7 +13,9 @@ namespace Assignment.Models
         public string Name { get; set; }
         
         public string Description { get; set; }
-       
+       public Topic Topic { get; set; }
+        public ICollection<Student> students { get; set; } = new HashSet<Student>();
+        public ICollection<Instructor>instructors  { get; set; }= new HashSet<Instructor> ();    
 
     }
 }

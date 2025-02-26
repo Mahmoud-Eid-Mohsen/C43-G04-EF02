@@ -4,6 +4,7 @@ using Assignment.Dbcontexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Assignment.Dbcontexts.migrations
 {
     [DbContext(typeof(Dbcontext))]
-    partial class DbcontextModelSnapshot : ModelSnapshot
+    [Migration("20250225195521_topic with course")]
+    partial class topicwithcourse
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -103,7 +106,7 @@ namespace Assignment.Dbcontexts.migrations
                     b.Property<double>("Bouns")
                         .HasColumnType("float");
 
-                    b.Property<int>("DepartmentsID")
+                    b.Property<int>("Dept_ID")
                         .HasColumnType("int");
 
                     b.Property<double>("HourRate")
@@ -118,7 +121,7 @@ namespace Assignment.Dbcontexts.migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DepartmentsID");
+                    b.HasIndex("Dept_ID");
 
                     b.ToTable("instructors");
                 });
@@ -138,7 +141,7 @@ namespace Assignment.Dbcontexts.migrations
                     b.Property<int>("Age")
                         .HasColumnType("int");
 
-                    b.Property<int?>("DepartmentId")
+                    b.Property<int>("Dep_Id")
                         .HasColumnType("int");
 
                     b.Property<string>("FName")
@@ -150,8 +153,6 @@ namespace Assignment.Dbcontexts.migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("DepartmentId");
 
                     b.ToTable("Students");
                 });
@@ -219,20 +220,11 @@ namespace Assignment.Dbcontexts.migrations
                 {
                     b.HasOne("Assignment.Models.Department", "Departments")
                         .WithMany("instructors")
-                        .HasForeignKey("DepartmentsID")
+                        .HasForeignKey("Dept_ID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Departments");
-                });
-
-            modelBuilder.Entity("Assignment.Models.Student", b =>
-                {
-                    b.HasOne("Assignment.Models.Department", "Department")
-                        .WithMany("Students")
-                        .HasForeignKey("DepartmentId");
-
-                    b.Navigation("Department");
                 });
 
             modelBuilder.Entity("Assignment.Models.Studunt_Course", b =>
@@ -252,8 +244,6 @@ namespace Assignment.Dbcontexts.migrations
 
             modelBuilder.Entity("Assignment.Models.Department", b =>
                 {
-                    b.Navigation("Students");
-
                     b.Navigation("instructors");
                 });
 #pragma warning restore 612, 618
