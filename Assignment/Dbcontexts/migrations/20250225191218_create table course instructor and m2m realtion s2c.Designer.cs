@@ -4,6 +4,7 @@ using Assignment.Dbcontexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Assignment.Dbcontexts.migrations
 {
     [DbContext(typeof(Dbcontext))]
-    partial class DbcontextModelSnapshot : ModelSnapshot
+    [Migration("20250225191218_create table course instructor and m2m realtion s2c")]
+    partial class createtablecourseinstructorandm2mrealtions2c
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -40,6 +43,9 @@ namespace Assignment.Dbcontexts.migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Top_ID")
+                        .HasColumnType("int");
 
                     b.HasKey("ID");
 
@@ -79,6 +85,9 @@ namespace Assignment.Dbcontexts.migrations
                     b.Property<int>("Ins_ID")
                         .HasColumnType("int");
 
+                    b.Property<int>("MgID")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -103,7 +112,7 @@ namespace Assignment.Dbcontexts.migrations
                     b.Property<double>("Bouns")
                         .HasColumnType("float");
 
-                    b.Property<int>("DepartmentsID")
+                    b.Property<int>("Dept_ID")
                         .HasColumnType("int");
 
                     b.Property<double>("HourRate")
@@ -117,8 +126,6 @@ namespace Assignment.Dbcontexts.migrations
                         .HasColumnType("float");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("DepartmentsID");
 
                     b.ToTable("instructors");
                 });
@@ -138,7 +145,7 @@ namespace Assignment.Dbcontexts.migrations
                     b.Property<int>("Age")
                         .HasColumnType("int");
 
-                    b.Property<int?>("DepartmentId")
+                    b.Property<int>("Dep_Id")
                         .HasColumnType("int");
 
                     b.Property<string>("FName")
@@ -150,8 +157,6 @@ namespace Assignment.Dbcontexts.migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("DepartmentId");
 
                     b.ToTable("Students");
                 });
@@ -174,30 +179,21 @@ namespace Assignment.Dbcontexts.migrations
                     b.ToTable("Studunt_Course");
                 });
 
-            modelBuilder.Entity("Assignment.Models.Course", b =>
+            modelBuilder.Entity("Assignment.Models.Topic", b =>
                 {
-                    b.OwnsOne("Assignment.Models.Topic", "Topic", b1 =>
-                        {
-                            b1.Property<int>("CourseID")
-                                .HasColumnType("int");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
-                            b1.Property<int>("Id")
-                                .HasColumnType("int");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                            b1.Property<string>("Name")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                            b1.HasKey("CourseID");
+                    b.HasKey("Id");
 
-                            b1.ToTable("Courses");
-
-                            b1.WithOwner()
-                                .HasForeignKey("CourseID");
-                        });
-
-                    b.Navigation("Topic")
-                        .IsRequired();
+                    b.ToTable("topics");
                 });
 
             modelBuilder.Entity("Assignment.Models.Course_Instructor", b =>
@@ -215,26 +211,6 @@ namespace Assignment.Dbcontexts.migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Assignment.Models.Instructor", b =>
-                {
-                    b.HasOne("Assignment.Models.Department", "Departments")
-                        .WithMany("instructors")
-                        .HasForeignKey("DepartmentsID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Departments");
-                });
-
-            modelBuilder.Entity("Assignment.Models.Student", b =>
-                {
-                    b.HasOne("Assignment.Models.Department", "Department")
-                        .WithMany("Students")
-                        .HasForeignKey("DepartmentId");
-
-                    b.Navigation("Department");
-                });
-
             modelBuilder.Entity("Assignment.Models.Studunt_Course", b =>
                 {
                     b.HasOne("Assignment.Models.Course", null)
@@ -248,13 +224,6 @@ namespace Assignment.Dbcontexts.migrations
                         .HasForeignKey("studentID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Assignment.Models.Department", b =>
-                {
-                    b.Navigation("Students");
-
-                    b.Navigation("instructors");
                 });
 #pragma warning restore 612, 618
         }
